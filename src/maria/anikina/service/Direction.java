@@ -1,4 +1,4 @@
-package maria.anikina.model;
+package maria.anikina.service;
 
 public enum Direction {
 	RIGHT,

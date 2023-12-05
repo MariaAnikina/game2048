@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 public class GameHelper {
 	public List<Integer> moveAndMergeEqual(List<Integer> list) {
-		System.out.println(list);
 		if (list.isEmpty()) {
 			return list;
 		}
@@ -19,7 +18,6 @@ public class GameHelper {
 					.collect(Collectors.toList());
 			for (int i = 0; i < sublistNotNull.size(); i++) {
 				list.set(index + i, sublistNotNull.get(i));
-				list.set(index + sublistNotNull.size() + i, null);
 			}
 			for (int i = index + sublistNotNull.size(); i < list.size(); i++) {
 				list.set(i, null);
@@ -28,9 +26,8 @@ public class GameHelper {
 		int listSize = list.size();
 		for (int i = 1; i < listSize; i++) {
 			if (list.get(i) != null && list.get(i - 1) != null && list.get(i).equals(list.get(i - 1))) {
-				list.set(i, list.get(i) * 2);
-				System.out.println(list);
-				list.remove(i - 1);
+				list.set(i - 1, list.get(i - 1) * 2);
+				list.remove(i);
 				list.add(null);
 
 			}

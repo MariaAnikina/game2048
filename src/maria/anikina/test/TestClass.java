@@ -1,12 +1,11 @@
 package maria.anikina.test;
 
-import maria.anikina.service.Board;
-import maria.anikina.service.Game;
+import maria.anikina.model.Board;
+import maria.anikina.model.Game;
 import maria.anikina.service.Game2048;
 import maria.anikina.service.SquareBoard;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class TestClass {
 	public static void main(String[] args) {

@@ -1,13 +1,17 @@
-package maria.anikina.service;
+package maria.anikina.model;
 
-import maria.anikina.model.Direction;
-import maria.anikina.service.Board;
+import maria.anikina.service.Direction;
 
 public interface Game {
 	void init();
+
 	boolean canMove();
+
 	void move(Direction direction);
+
 	void addItem();
+
 	Board getGameBoard();
+
 	boolean hasWin();
 }

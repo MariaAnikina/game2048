@@ -1,6 +1,6 @@
 package maria.anikina.test;
 
-import maria.anikina.service.Board;
+import maria.anikina.model.Board;
 import maria.anikina.service.SquareBoard;
 
 import java.util.List;
