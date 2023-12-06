@@ -7,18 +7,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Game2048 implements Game {
-	public final double FIELD_OCCUPANCY_RATIO_TO_START_THE_GAME = 0.2;
+	public final double FIELD_OCCUPANCY_RATIO_TO_START_THE_GAME = 0.125;
+	public static final int GAME_SIZE = 4;
+	private Board<Key, Integer> board = new SquareBoard<>(GAME_SIZE);
 	GameHelper helper = new GameHelper();
-	Board board;
 	Random random = new Random();
 
-	public Game2048(Board board) {
+	public Game2048(Board<Key, Integer> board) {
 		this.board = board;
+	}
+
+	public Game2048() {
 	}
 
 	@Override
 	public void init() {
-		int listLength = board.getHeight() * board.getWidth();
+		int listLength = GAME_SIZE * GAME_SIZE;
 		List<Integer> listNull = new ArrayList<>();
 		for (int i = 0; i < listLength; i++) {
 			listNull.add(null);
@@ -28,7 +32,6 @@ public class Game2048 implements Game {
 		for (int i = 0; i < fieldFullness; i++) {
 			addItem();
 		}
-		System.out.println("Игра началась!");
 	}
 
 	@Override
@@ -38,23 +41,30 @@ public class Game2048 implements Game {
 	}
 
 	@Override
-	public void move(Direction direction) {
+	public boolean move(Direction direction) {
+		boolean isMoveMade = false;
 		if (canMove()) {
 			switch (direction) {
 				case LEFT:
 					moveLeft();
+					addItem();
 					break;
 				case RIGHT:
 					moveRight();
+					addItem();
 					break;
 				case UP:
 					moveUp();
+					addItem();
 					break;
 				case DOWN:
 					moveDown();
+					addItem();
 					break;
 			}
+			isMoveMade = true;
 		}
+		return isMoveMade;
 	}
 
 	@Override

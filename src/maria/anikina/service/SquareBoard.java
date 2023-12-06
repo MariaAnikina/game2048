@@ -6,9 +6,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SquareBoard extends Board {
+public class SquareBoard <V> extends Board <Key, V>{
 
 	private int size;
+
 
 	public SquareBoard(int size) {
 		super(size, size);
@@ -16,7 +17,7 @@ public class SquareBoard extends Board {
 	}
 
 	@Override
-	public void fillBoard(List<Integer> list) {
+	public void fillBoard(List<V> list) {
 		getBoard().clear();
 		int index = 0;
 		for (int i = 0; i < size; i++) {
@@ -35,7 +36,7 @@ public class SquareBoard extends Board {
 	}
 
 	@Override
-	public void addItem(Key key, Integer value) {
+	public void addItem(Key key, V value) {
 		getBoard().put(key, value);
 	}
 
@@ -49,7 +50,7 @@ public class SquareBoard extends Board {
 	}
 
 	@Override
-	public Integer getValue(Key key) {
+	public V getValue(Key key) {
 		return getBoard().get(key);
 	}
 
@@ -70,14 +71,16 @@ public class SquareBoard extends Board {
 	}
 
 	@Override
-	public boolean hasValue(Integer value) {
+	public boolean hasValue(V value) {
 		return getBoard().containsValue(value);
 	}
 
 	@Override
-	public List<Integer> getValues(List<Key> keys) {
+	public List<V> getValues(List<Key> keys) {
 		return getBoard().keySet().stream()
 				.filter(keys::contains)
+				.sorted(Comparator.comparing(Key::getJ))
+				.sorted(Comparator.comparing(Key::getI))
 				.map(s -> getBoard().get(s))
 				.collect(Collectors.toList());
 	}

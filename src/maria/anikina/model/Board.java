@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Board {
+public abstract class Board<T, V> {
 	private int width;
 	private int height;
-	private Map<Key, Integer> board = new HashMap<>();
+	private Map<T, V> board = new HashMap<>();
 
 	public Board(int weigh, int height) {
 		this.width = weigh;
@@ -19,23 +19,23 @@ public abstract class Board {
 	public Board() {
 	}
 
-	public abstract void fillBoard(List<Integer> list);
+	public abstract void fillBoard(List<V> list);
 
-	public abstract List<Key> availableSpace();
+	public abstract List<T> availableSpace();
 
-	public abstract void addItem(Key key, Integer value);
+	public abstract void addItem(T key, V value);
 
-	public abstract Key getKey(int i, int j);
+	public abstract T getKey(int i, int j);
 
-	public abstract Integer getValue(Key key);
+	public abstract V getValue(T key);
 
-	public abstract List<Key> getColumn(int j);
+	public abstract List<T> getColumn(int j);
 
-	public abstract List<Key> getRow(int i);
+	public abstract List<T> getRow(int i);
 
-	public abstract boolean hasValue(Integer value);
+	public abstract boolean hasValue(V value);
 
-	public abstract List<Integer> getValues(List<Key> keys);
+	public abstract List<V> getValues(List<T> keys);
 
 	public int getWidth() {
 		return width;
@@ -53,11 +53,11 @@ public abstract class Board {
 		this.height = height;
 	}
 
-	public Map<Key, Integer> getBoard() {
+	public Map<T, V> getBoard() {
 		return board;
 	}
 
-	public void setBoard(Map<Key, Integer> board) {
+	public void setBoard(Map<T, V> board) {
 		this.board = board;
 	}
 }
