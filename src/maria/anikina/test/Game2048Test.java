@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class Game2048Test {
 	Game game = new Game2048();
@@ -70,6 +70,20 @@ public class Game2048Test {
 		if (!game.canMove()) throw new RuntimeException("canMove not work =(");
 		game.addItem();
 		if (b.availableSpace().size() != 13) throw new RuntimeException("addItem must be add 1 item");
+	}
+
+	@Test
+	public void checkCanMove_whenThereNoMove_thenReturnFalse() {
+		b.fillBoard(asList(1,2,3,4,5,6,7,8, 9,10,11,12,13,14,15,16));
+
+		assertFalse(game.canMove());
+	}
+
+	@Test
+	public void checkCanMove_whenThereMoveButNoEmptyCells_thenReturnTrue() {
+		b.fillBoard(asList(1,2,2,4,5,6,7,8, 9,10,11,12,13,14,15,16));
+
+		assertTrue(game.canMove());
 	}
 
 	private void showField() {

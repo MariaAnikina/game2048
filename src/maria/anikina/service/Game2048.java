@@ -37,7 +37,41 @@ public class Game2048 implements Game {
 	@Override
 	public boolean canMove() {
 		Collection<Integer> list = board.getBoard().values();
-		return list.contains(null);
+		if (list.contains(null)) {
+			return true;
+		}
+		for (int i = 0; i < board.getHeight(); i++) {
+			for (int j = 0; j < board.getWidth() - 1; j++) {
+				if (i == 0) {
+					if (board.getValue(board.getKey(i, j)).equals(board.getValue(board.getKey(i, j + 1)))) {
+						return true;
+					}
+					if (board.getValue(board.getKey(i, j)).equals(board.getValue(board.getKey(i + 1, j)))) {
+						return true;
+					}
+				}
+				if (i > 0 && i < board.getHeight() - 1) {
+					if (board.getValue(board.getKey(i, j)).equals(board.getValue(board.getKey(i - 1, j)))) {
+						return true;
+					}
+					if (board.getValue(board.getKey(i, j)).equals(board.getValue(board.getKey(i, j + 1)))) {
+						return true;
+					}
+					if (board.getValue(board.getKey(i, j)).equals(board.getValue(board.getKey(i + 1, j)))) {
+						return true;
+					}
+				}
+				if (i == board.getHeight() - 1) {
+					if (board.getValue(board.getKey(i, j)).equals(board.getValue(board.getKey(i, j + 1)))) {
+						return true;
+					}
+					if (board.getValue(board.getKey(i, j)).equals(board.getValue(board.getKey(i - 1, j)))) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
