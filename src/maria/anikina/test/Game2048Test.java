@@ -1,24 +1,26 @@
 package maria.anikina.test;
 
+import maria.anikina.exception.NotEnoughSpace;
 import maria.anikina.model.Board;
 import maria.anikina.model.Game;
 import maria.anikina.service.Direction;
 import maria.anikina.service.Game2048;
 import maria.anikina.service.Key;
 import maria.anikina.service.SquareBoard;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
+import static maria.anikina.service.Game2048.GAME_SIZE;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Game2048Test {
-	Game game = new Game2048();
-	Board<Key, Integer> b = game.getGameBoard();
+	private Game game = new Game2048();
+	private Board<Key, Integer> b = game.getGameBoard();
 
 	@Test
-	public void gameTest() {
+	public void gameTest()  throws NotEnoughSpace  {
 		Board<Key, String> b2 = new SquareBoard<>(1);
 		b2.fillBoard(asList("hello"));
 		if (!"hello".equals(b2.getValue(b2.getKey(0 ,0)))) throw new RuntimeException("board not work =(");
@@ -81,10 +83,20 @@ public class Game2048Test {
 
 	@Test
 	public void checkCanMove_whenThereMoveButNoEmptyCells_thenReturnTrue() {
-		b.fillBoard(asList(1,2,2,4,5,6,7,8, 9,10,11,12,13,14,15,16));
+		b.fillBoard(asList(1,2,3,4,1,6,7,8, 9,10,11,12,13,14,15,16));
 
 		assertTrue(game.canMove());
 	}
+
+	@Test
+	void init_exception() throws NotEnoughSpace {
+		game.init();
+		for (var i = 0; i < GAME_SIZE * GAME_SIZE - 2; i++) {
+			game.addItem();
+		}
+		assertThrows(NotEnoughSpace.class, game::addItem);
+	}
+
 
 	private void showField() {
 		for (int i = 0; i < 4; i++) {

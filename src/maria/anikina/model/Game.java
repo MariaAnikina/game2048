@@ -1,5 +1,6 @@
 package maria.anikina.model;
 
+import maria.anikina.exception.NotEnoughSpace;
 import maria.anikina.service.Direction;
 
 public interface Game {
@@ -9,7 +10,7 @@ public interface Game {
 
 	boolean move(Direction direction);
 
-	void addItem();
+	void addItem() throws NotEnoughSpace;
 
 	Board getGameBoard();
 

@@ -1,5 +1,6 @@
 package maria.anikina.service;
 
+import maria.anikina.exception.NotEnoughSpace;
 import maria.anikina.model.Board;
 import maria.anikina.model.Game;
 
@@ -10,8 +11,8 @@ public class Game2048 implements Game {
 	public final double FIELD_OCCUPANCY_RATIO_TO_START_THE_GAME = 0.125;
 	public static final int GAME_SIZE = 4;
 	private Board<Key, Integer> board = new SquareBoard<>(GAME_SIZE);
-	GameHelper helper = new GameHelper();
-	Random random = new Random();
+	private GameHelper helper = new GameHelper();
+	private Random random = new Random();
 
 	public Game2048(Board<Key, Integer> board) {
 		this.board = board;
@@ -22,16 +23,21 @@ public class Game2048 implements Game {
 
 	@Override
 	public void init() {
-		int listLength = GAME_SIZE * GAME_SIZE;
-		List<Integer> listNull = new ArrayList<>();
-		for (int i = 0; i < listLength; i++) {
-			listNull.add(null);
+		try {
+			int listLength = GAME_SIZE * GAME_SIZE;
+			List<Integer> listNull = new ArrayList<>();
+			for (int i = 0; i < listLength; i++) {
+				listNull.add(null);
+			}
+			board.fillBoard(listNull);
+			int fieldFullness = (int) (listLength * FIELD_OCCUPANCY_RATIO_TO_START_THE_GAME);
+			for (int i = 0; i < fieldFullness; i++) {
+				addItem();
+			}
+		} catch (NotEnoughSpace e) {
+			e.printStackTrace();
 		}
-		board.fillBoard(listNull);
-		int fieldFullness = (int) (listLength * FIELD_OCCUPANCY_RATIO_TO_START_THE_GAME);
-		for (int i = 0; i < fieldFullness; i++) {
-			addItem();
-		}
+
 	}
 
 	@Override
@@ -77,41 +83,51 @@ public class Game2048 implements Game {
 	@Override
 	public boolean move(Direction direction) {
 		boolean isMoveMade = false;
-		if (canMove()) {
-			switch (direction) {
-				case LEFT:
-					moveLeft();
-					addItem();
-					break;
-				case RIGHT:
-					moveRight();
-					addItem();
-					break;
-				case UP:
-					moveUp();
-					addItem();
-					break;
-				case DOWN:
-					moveDown();
-					addItem();
-					break;
+		try {
+			if (canMove()) {
+				switch (direction) {
+					case LEFT:
+						moveLeft();
+						addItem();
+						break;
+					case RIGHT:
+						moveRight();
+						addItem();
+						break;
+					case UP:
+						moveUp();
+						addItem();
+						break;
+					case DOWN:
+						moveDown();
+						addItem();
+						break;
+				}
+				isMoveMade = true;
 			}
-			isMoveMade = true;
+		} catch (NotEnoughSpace e) {
+			e.printStackTrace();
 		}
 		return isMoveMade;
 	}
 
 	@Override
-	public void addItem() {
-		int row = -1;
-		int column = -1;
-		Integer element = 0;
-		while (element != null) {
-			row = random.nextInt(board.getHeight());
-			column = random.nextInt(board.getWidth());
-			element = board.getValue(new Key(row, column));
+	public void addItem() throws NotEnoughSpace {
+		if (!board.getBoard().containsValue(null)) {
+			throw new NotEnoughSpace("Нет свободного места");
 		}
-		board.getBoard().put(board.getKey(row, column), 2);
+		List<Key> nullValueItemKeys = board.getBoard().keySet().stream()
+				.filter(key -> board.getBoard().get(key) == null).collect(Collectors.toList());
+		if (nullValueItemKeys.size() == 0) {
+			return;
+		}
+		int randomKey = random.nextInt(nullValueItemKeys.size());
+		int chance = random.nextInt(10);
+		if (chance > 7) {
+			board.getBoard().put(nullValueItemKeys.get(randomKey), 4);
+		} else {
+			board.getBoard().put(nullValueItemKeys.get(randomKey), 2);
+		}
 	}
 
 	@Override
